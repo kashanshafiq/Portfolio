@@ -1,0 +1,8 @@
+import { createApp } from 'vue'
+import '@fontsource-variable/instrument-sans'
+import '@fontsource/ibm-plex-mono/400.css'
+import './styles/main.css'
+import App from './App.vue'
+import { router } from './router'
+
+createApp(App).use(router).mount('#app')

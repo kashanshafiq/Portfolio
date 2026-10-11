@@ -1,0 +1,58 @@
+import type { Project } from '../types/content'
+
+export const projects: Project[] = [
+  {
+    slug: 'structural-design', title: 'Structural design', category: 'Structures', tools: ['ETABS', 'SAFE'], diagram: 'structure',
+    summary: 'Analysis and design of an RC residential building, from the structural model to member and foundation checks.',
+    context: 'A team academic project for Design of Structures, exploring the behaviour of a reinforced-concrete residential building under gravity and lateral loads.',
+    scope: ['Develop the structural model and assign dead, live and seismic loads.', 'Review story drift, displacement and member demands.', 'Use SAFE for slab and foundation design checks.'],
+    outcome: 'A design report connecting modelling decisions with analysis results and structural checks.',
+    contribution: 'Team project with Adil Ayub Khan, M. Maaz Khan, Marfood Mutaal and Usama Arif. The report lists Kashan Shafiq as a group member; individual task allocation is not specified.',
+    source: ['Documents/Semester Projects/DOS CEP.pdf'],
+  },
+  {
+    slug: 'retaining-walls', title: 'Retaining wall design', category: 'Structures', tools: ['Excel'], diagram: 'wall',
+    summary: 'Spreadsheet-based design of gravity and cantilever retaining walls, with and without a shear key.',
+    context: 'A Reinforced Concrete Design II semester project examining stability and reinforcement design through adjustable spreadsheet calculations.',
+    scope: ['Define geometric, soil, concrete and reinforcement parameters.', 'Check overturning, sliding and bearing capacity.', 'Design cantilever stem, heel and toe reinforcement, including flexural and shear checks.'],
+    outcome: 'Design sheets that connect adopted dimensions and reinforcement details with governing stability and shear checks.',
+    contribution: 'Developed the design spreadsheets, as described in the accompanying project note.',
+    source: ['Documents/Semester Projects/RCD 2/Retaining Wall Design Excel Sheets (RCD-2).txt', 'Documents/Semester Projects/RCD 2/Gravity Retaining Wall .xlsx', 'Documents/Semester Projects/RCD 2/Cantilever Retaining Wall.xlsx'],
+  },
+  {
+    slug: 'sewerage-modelling', title: 'Sewerage modelling', category: 'Water', tools: ['EPA SWMM'], diagram: 'water',
+    summary: 'Hydraulic modelling of a combined sewerage network under typical and extreme rainfall conditions.',
+    context: 'A wastewater engineering semester project examining sanitary and stormwater flows for a catchment in Wah Cantt.',
+    scope: ['Estimate population and wastewater flows, and define subcatchments.', 'Model pipes, junctions and outfalls using Dynamic Wave routing.', 'Compare rainfall scenarios and revise pipe slopes, diameters and invert levels.'],
+    outcome: 'Simulation reports documenting network performance and iterative changes to address velocity, surcharge and flooding problems.',
+    contribution: 'Collaborative semester work, described in Kashan’s project note. The supplied summary names Faizan Manshad; individual responsibilities require confirmation before a detailed case study is published.',
+    source: ['Documents/Semester Projects/Waste Water/Wastewater Semester Project.txt', 'Documents/Semester Projects/Waste Water/Summary.pdf'],
+  },
+  {
+    slug: 'quantity-surveying', title: 'Building quantity takeoff', category: 'Planning', tools: ['Excel'], diagram: 'quantity',
+    summary: 'Member-by-member concrete, reinforcement and material quantities for a multi-storey building.',
+    context: 'A Quantity Surveying and Cost Estimation semester project translating building information into measurable material requirements.',
+    scope: ['Calculate concrete quantities for foundations, columns, beams and slabs.', 'Prepare reinforcement takeoff with bar lengths, spacing and weights.', 'Organise masonry, plaster, wastage allowances and material costs.'],
+    outcome: 'Structured quantity and reinforcement summaries, originally prepared in Excel and retained as PDF records.',
+    contribution: 'Team semester project. The accompanying note documents the overall scope; individual task allocation is not recorded.',
+    source: ['Documents/Semester Projects/Quantity/Quantity Surveying Semester Project.txt'],
+  },
+  {
+    slug: 'construction-planning', title: 'Construction planning', category: 'Planning', tools: ['Primavera P6'], diagram: 'schedule',
+    summary: 'Scheduling, resource planning and cost management for a residential construction project.',
+    context: 'A Project Planning and Management academic exercise for a residential project under a labour-only contract.',
+    scope: ['Define the work and organisational breakdown structures.', 'Build the activity schedule and assess the critical path.', 'Review resource usage and planned progress.'],
+    outcome: 'A scheduling report with programme, resource and cost-management outputs.',
+    contribution: 'Team project with Faizan Manshad, Fahad Bin Rasheed and Muhammad Ali; individual responsibilities are not specified in the source summary.',
+    source: ['Documents/Semester Projects/PPM CEP.pdf'],
+  },
+  {
+    slug: 'highway-geometry', title: 'Highway geometry', category: 'Transportation', tools: ['AutoCAD Civil 3D', 'Google Earth'], diagram: 'road',
+    summary: 'A geometric design and road-safety investigation of a section of Taxila GT Road.',
+    context: 'An academic investigation for Geometric Design of Highways and Streets, linking terrain data and road alignment to safety considerations.',
+    scope: ['Develop a terrain model from geospatial points.', 'Examine horizontal curve geometry and design-speed relationships.', 'Document geometric constraints and safety observations.'],
+    outcome: 'A comparative report examining the selected road segment’s geometric design features.',
+    contribution: 'Team academic project. Kashan is listed among the group members; the precise division of work is not recorded.',
+    source: ['Documents/Semester Projects/Geometric CEP.pdf'],
+  },
+]

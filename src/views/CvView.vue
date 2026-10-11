@@ -1,0 +1,10 @@
+<script setup lang="ts">
+import PageIntro from '../components/PageIntro.vue'
+import { profile, skills } from '../content/profile'
+import { experience } from '../content/experience'
+import { research } from '../content/research'
+import { recognition, community } from '../content/recognition'
+const printCv = () => window.print()
+const assetBase = import.meta.env.BASE_URL
+</script>
+<template><div class="shell page-body cv-page"><PageIntro eyebrow="Academic CV" :title="profile.name" :description="profile.field"><div class="hero-actions no-print"><button class="button primary" @click="printCv">Print / Save as PDF</button><a v-if="profile.cvPath" class="text-link" :href="`${assetBase}${profile.cvPath}`" download>Download CV</a></div></PageIntro><section><h2>Profile</h2><p>{{ profile.biography }}</p><p style="margin-top:14px"><a :href="`mailto:${profile.contact.email}`">{{ profile.contact.email }}</a></p></section><section><h2>Education</h2><h3>{{ profile.education.degree }}</h3><p>{{ profile.education.institution }} · {{ profile.education.period }}</p><p>CGPA {{ profile.education.cgpa }} · {{ profile.education.distinction }}</p></section><section><h2>Experience</h2><article v-for="item in experience" :key="item.organization" class="cv-item"><h3>{{ item.role }} · {{ item.organization }}</h3><p>{{ item.period }}</p><p>{{ item.summary }}</p></article></section><section><h2>Research / Preprint</h2><p class="citation">{{ research.citation }}</p></section><section><h2>Selected honors</h2><article v-for="item in recognition.filter(x=>['Award','Scholarship'].includes(x.type))" :key="item.title" class="cv-item"><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></article></section><section><h2>Technical skills</h2><p v-for="group in skills" :key="group.title" style="margin-bottom:12px"><strong>{{ group.title }}:</strong> {{ group.items.join(', ') }}</p></section><section><h2>Community & leadership</h2><article v-for="item in community" :key="item.title" class="cv-item"><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></article></section></div></template>
