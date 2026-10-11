@@ -13,9 +13,38 @@ export interface Project {
   source: string[]
 }
 export interface Experience {
+  slug: string
   organization: string
   role: string
   period: string
+  location: string
+  domain: string
   summary: string
+  context: string
   details: string[]
+  tools: string[]
+  achievements: string[]
+  learnings: string[]
+}
+
+export interface ResearchMethod {
+  title: string
+  detail: string
+}
+
+export interface ResearchItem {
+  slug: string
+  title: string
+  shortTitle: string
+  status: string
+  period: string
+  venue: string
+  authors: string[]
+  doi: string
+  summary: string
+  context: string
+  overviewText: string[]
+  methods: ResearchMethod[]
+  tools: string[]
+  citation: string
 }

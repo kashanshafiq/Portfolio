@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { feaPalette } from './feaPalette'
 export interface BridgeViewer {
   rotate: (angle: number) => void; zoom: (factor: number) => void
   elevation: (enabled: boolean) => void; fea: (enabled: boolean) => void
@@ -38,17 +39,16 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
     return tex
   }
   const concreteTex = createConcreteTexture()
-  const trussSteel = new THREE.MeshStandardMaterial({ color: 0xc47b59, metalness: .6, roughness: .4 })
-  const topChordSteel = new THREE.MeshStandardMaterial({ color: 0xc47b59, metalness: .6, roughness: .4 })
-  const connectionSteel = new THREE.MeshStandardMaterial({ color: 0x222624, metalness: .7, roughness: .3 })
-  const deckSteel = new THREE.MeshStandardMaterial({ color: 0xb57050, metalness: .6, roughness: .5 })
-  const bracingSteel = new THREE.MeshStandardMaterial({ color: 0xd68965, metalness: .5, roughness: .4 })
+  const trussSteel = new THREE.MeshStandardMaterial({ color: 0x86a99a, metalness: .6, roughness: .4 })
+  const topChordSteel = new THREE.MeshStandardMaterial({ color: 0x86a99a, metalness: .6, roughness: .4 })
+  const connectionSteel = new THREE.MeshStandardMaterial({ color: 0x162d4a, metalness: .75, roughness: .35 })
+  const deckSteel = new THREE.MeshStandardMaterial({ color: 0x7b9b8c, metalness: .6, roughness: .5 })
+  const bracingSteel = new THREE.MeshStandardMaterial({ color: 0x93b6a5, metalness: .5, roughness: .4 })
   const railSteel = new THREE.MeshStandardMaterial({ color: 0x111312, metalness: .5, roughness: .5 })
-  const road = new THREE.MeshStandardMaterial({ color: 0x333b38, roughness: .9 })
+  const road = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: .9 })
   const concrete = new THREE.MeshStandardMaterial({ map: concreteTex, roughness: 1 })
   const lineMaterial = new THREE.LineBasicMaterial({ color: 0x8caaa0, transparent: true, opacity: .19 })
   const unit = new THREE.BoxGeometry(1, 1, 1), edges = new THREE.EdgesGeometry(unit)
-  const feaBoxGeom = new THREE.BoxGeometry(1, 1, 1, 4, 16, 4)
   const meshes: THREE.Mesh[] = []
   function box(group: THREE.Group, x: number, y: number, z: number, w: number, h: number, d: number, material: THREE.MeshStandardMaterial) {
     const mesh = new THREE.Mesh(unit, material)
@@ -64,12 +64,77 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
   }
   // Eight panels, polygonal arched upper chord and overhead X-bracing.
   const nodes = Array.from({length: 9}, (_,i) => ({ x: -8+i*2, y: 1.35 + 3.25*Math.sin(Math.PI*i/8) ** .6 }))
+  // Compact, paired gussets sit outside the member faces instead of being
+  // buried inside the chords. Chamfered shoulders suggest the web load path.
+  const connectionGeometries: THREE.BufferGeometry[] = []
+  const boltPositions: THREE.Vector3[] = []
+  // Convex side-profile limits: end planes, lower chord underside, and the
+  // actual outer edge of each sloping upper-chord segment (half-width .115).
+  const profileLimits: [number, number, number][] = [[1,0,8],[-1,0,8],[0,-1,-.89]]
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodes[i]!, b = nodes[i+1]!
+    const slope = (b.y-a.y)/(b.x-a.x)
+    profileLimits.push([-slope,1,a.y-slope*a.x + .115*Math.hypot(1,slope)])
+  }
+  function trimToProfile(points: THREE.Vector2[]) {
+    for (const [a,b,c] of profileLimits) {
+      const clipped: THREE.Vector2[] = []
+      for (let i = 0; i < points.length; i++) {
+        const start = points[i]!, finish = points[(i+1)%points.length]!
+        const ds = a*start.x+b*start.y-c, df = a*finish.x+b*finish.y-c
+        if (ds <= 0) clipped.push(start)
+        if ((ds <= 0) !== (df <= 0)) clipped.push(start.clone().lerp(finish,ds/(ds-df)))
+      }
+      points = clipped
+    }
+    return points
+  }
+  function gusset(x: number, y: number, z: number, upper: boolean, end = false) {
+    const direction = upper ? -1 : 1
+    const profile = end
+      ? [[-.26,-.16],[.26,-.16],[.26,.35],[.15,.51],[-.15,.51],[-.26,.35]]
+      : [[-.36,-.13],[.36,-.13],[.36,.08],[.17,.32],[-.17,.32],[-.36,.08]]
+    const trimmed = trimToProfile(profile.map(([px,py]) => new THREE.Vector2(x+px!*direction,y+py!*direction)))
+    const shape = new THREE.Shape(trimmed.map(point => new THREE.Vector2(point.x-x,point.y-y)))
+    shape.closePath()
+    const geometry = new THREE.ExtrudeGeometry(shape, { depth: .045, bevelEnabled: false, steps: 1 })
+    geometry.translate(0,0,-.0225)
+    const outlineGeometry = new THREE.EdgesGeometry(geometry)
+    connectionGeometries.push(geometry, outlineGeometry)
+    const bolts = end
+      ? [[-Math.sign(x)*.06,.035],[-Math.sign(x)*.18,.035],[-Math.sign(x)*.06,.245],[-Math.sign(x)*.18,.245]]
+      : [[-.24,-.035],[.24,-.035],[-.16,.10],[.16,.10],[-.075,.235],[.075,.235]]
+    const center = trimmed.reduce((sum,point) => sum.add(point),new THREE.Vector2()).divideScalar(trimmed.length)
+    const insideWithMargin = (point: THREE.Vector2) => trimmed.every((a,index) => {
+      const b = trimmed[(index+1)%trimmed.length]!
+      return ((b.x-a.x)*(point.y-a.y)-(b.y-a.y)*(point.x-a.x))/a.distanceTo(b) >= .048
+    })
+    const fittedBolts = bolts.map(([bx,by]) => {
+      const point = new THREE.Vector2(x+bx!*direction,y+by!*direction)
+      // Keep the full bolt head clear of every newly trimmed plate edge.
+      for (let step = 0; step < 32 && !insideWithMargin(point); step++) point.lerp(center,.12)
+      return point
+    }).filter(insideWithMargin)
+    for (const face of [-1,1]) {
+      const plate = new THREE.Mesh(geometry, connectionSteel)
+      plate.position.set(x,y,z + face * .1425)
+      plate.userData.part = 'truss'
+      plate.userData.isConnection = true
+      plate.add(new THREE.LineSegments(outlineGeometry,lineMaterial))
+      groups.truss.add(plate); meshes.push(plate)
+      for (const point of fittedBolts) {
+        boltPositions.push(new THREE.Vector3(point.x,point.y,z + face * .183))
+      }
+    }
+  }
   for (const z of [-2,2]) {
     beam(groups.truss,[-8,1,z],[8,1,z],.22, trussSteel)
     for (let i=0; i<nodes.length; i++) {
       const n = nodes[i]!
       beam(groups.truss,[n.x,1,z],[n.x,n.y,z],.15, trussSteel)
-      box(groups.truss,n.x,1,z,.34,.34,.12, connectionSteel); box(groups.truss,n.x,n.y,z,.34,.34,.12, connectionSteel)
+      // End posts use one plate spanning the closely spaced chord junctions.
+      if (i === 0 || i === 8) gusset(n.x,1,z,false,true)
+      else { gusset(n.x,1,z,false); gusset(n.x,n.y,z,true) }
       if (i<8) {
         const next=nodes[i+1]!
         beam(groups.truss,[n.x,n.y,z],[next.x,next.y,z],.23, topChordSteel)
@@ -79,6 +144,15 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
     for (let x=-8; x<=8; x+=.5) beam(groups.deck,[x,1,z*1.12],[x,1.65,z*1.12],.035, railSteel)
     for (const y of [1.32,1.65]) beam(groups.deck,[-8,y,z*1.12],[8,y,z*1.12],.045, railSteel)
   }
+  // Restrained hex heads, with four at the trimmed ends; shared instancing.
+  const boltGeometry = new THREE.CylinderGeometry(.028,.028,.026,6)
+  boltGeometry.rotateX(Math.PI / 2)
+  const boltMaterial = new THREE.MeshStandardMaterial({ color: 0x91a1b1, metalness: .65, roughness: .42 })
+  const connectionBolts = new THREE.InstancedMesh<THREE.CylinderGeometry, THREE.Material>(boltGeometry,boltMaterial,boltPositions.length)
+  const boltMatrix = new THREE.Matrix4()
+  boltPositions.forEach((position,index) => connectionBolts.setMatrixAt(index,boltMatrix.makeTranslation(position)))
+  connectionBolts.instanceMatrix.needsUpdate = true
+  groups.truss.add(connectionBolts)
   const roadMesh = box(groups.deck,0,.88,0,16.7,.2,4.65,road)
   roadMesh.userData.isRoad = true
   for(let x=-8; x<=8; x+=2) beam(groups.deck,[x,.65,-2.4],[x,.65,2.4],.17, deckSteel)
@@ -111,115 +185,87 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
     if(!outlines.has(id)) outlines.set(id,lineMaterial.clone())
     ;(mesh.children[0] as THREE.LineSegments).material=outlines.get(id)!
   })
-  const feaWires: THREE.LineSegments[] = []
-  let feaModeActive = false
-
-  /**
-   * True ANSYS/Abaqus 7-stop rainbow colormap: blue→cyan→green→yellow→orange→red
-   */
-  function feaColor(s: number): THREE.Color {
-    s = THREE.MathUtils.clamp(s, 0, 1)
-    const stops: [number,number,number,number][] = [
-      [0.000,   0,   0, 255],
-      [0.166,   0, 128, 255],
-      [0.333,   0, 255, 255],
-      [0.500,   0, 255,   0],
-      [0.666, 255, 255,   0],
-      [0.833, 255, 128,   0],
-      [1.000, 255,   0,   0],
-    ]
-    let lo = stops[0]!, hi = stops[stops.length-1]!
-    for (let i = 0; i < stops.length-1; i++) {
-      if (s >= stops[i]![0] && s <= stops[i+1]![0]) { lo = stops[i]!; hi = stops[i+1]!; break }
-    }
-    const t = lo[0] === hi[0] ? 0 : (s - lo[0]) / (hi[0] - lo[0])
-    return new THREE.Color(
-      (lo[1] + (hi[1]-lo[1])*t) / 255,
-      (lo[2] + (hi[2]-lo[2])*t) / 255,
-      (lo[3] + (hi[3]-lo[3])*t) / 255,
-    )
-  }
-
-  function vertexStress(wx: number, wy: number, wz: number, part: string): number {
-    const normX = Math.abs(wx) / 8  // 0 = midspan, 1 = support
-
-    let s = 0
-
-    if (part === 'supports') {
-      // Piers: RED at the top (where they meet the deck), GREEN/BLUE at the bottom
-      // Using the exact pattern from image 1a and 2a
-      const normH = THREE.MathUtils.clamp((wy + 0.85) / 1.6, 0, 1)
-      s = 0.4 + 0.6 * normH
-    } else {
-      // Bridge span (deck, truss): RED at ends (supports), BLUE at midspan
-      // The images clearly show the stress is highest at the supports
-      s = Math.pow(normX, 1.4)
-      
-      // Add a slight vertical variation to give the mesh some 3D stress depth
-      const normY = THREE.MathUtils.clamp((wy + 0.5) / 4.0, 0, 1)
-      s += normY * 0.15
-    }
-
-    // Small spatial noise to mimic finite element mesh discretisation scatter
-    s += Math.sin(wx*12.7) * Math.cos(wy*15.2) * Math.sin(wz*14.1) * 0.02
-
-    return THREE.MathUtils.clamp(s, 0, 1)
-  }
-
-  function showFEA(enabled: boolean) {
-    feaModeActive = enabled
-    for (const w of feaWires) { w.parent?.remove(w); w.geometry.dispose(); (w.material as THREE.Material).dispose() }
-    feaWires.length = 0
-    for (const mesh of meshes) {
-      const material = mesh.material as THREE.MeshStandardMaterial
-      const part = mesh.userData.part as string
-      const lineMesh = mesh.children[0] as THREE.LineSegments
-
-      if (enabled) {
-        // Build vertex-coloured high-res FEA geometry (cached per mesh)
-        if (!mesh.userData.feaGeometry) {
-          const geom = feaBoxGeom.clone()
-          const pos = geom.attributes.position as THREE.BufferAttribute
-          const colors = new Float32Array(pos.count * 3)
-          mesh.updateMatrixWorld(true)
-          for (let i = 0; i < pos.count; i++) {
-            const v = new THREE.Vector3(pos.getX(i), pos.getY(i), pos.getZ(i))
-            v.applyMatrix4(mesh.matrixWorld)
-            const c = feaColor(vertexStress(v.x, v.y, v.z, part))
-            colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b
+  // Reference legend colors are sRGB: decode once, then use the renderer's
+  // output conversion without exposure, material lighting, or tone mapping.
+  const feaMaterial = new THREE.ShaderMaterial({
+    uniforms: { palette: { value: feaPalette.map(hex => new THREE.Color(hex)) } },
+    vertexShader: `
+      varying vec3 studyPosition;
+      void main() {
+        vec4 localPosition = vec4(position, 1.0);
+        #ifdef USE_INSTANCING
+          localPosition = instanceMatrix * localPosition;
+        #endif
+        studyPosition = (modelMatrix * localPosition).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * localPosition;
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 palette[12];
+      varying vec3 studyPosition;
+      void main() {
+        // Illustrative symmetric contour field, not solved stress values.
+        // Continuous spatial sampling keeps adjoining members consistent.
+        float response = clamp(abs(studyPosition.x) / 8.0, 0.0, 1.0);
+        int band = int(min(floor(response * 12.0), 11.0));
+        gl_FragColor = vec4(palette[band], 1.0);
+        #include <colorspace_fragment>
+      }
+    `,
+    toneMapped: false,
+    polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
+  })
+  const feaEdgeMaterial = new THREE.LineBasicMaterial({
+    color: 0x15232c, transparent: true, opacity: .42, toneMapped: false,
+  })
+  const feaMeshMaterial = new THREE.LineBasicMaterial({
+    color: 0x15232c, transparent: true, opacity: .16, toneMapped: false,
+  })
+  const feaGrids = new Map<THREE.Mesh, THREE.LineSegments>()
+  // Rectangular surface cells sized in model units avoid dense diagonal clutter.
+  function surfaceGrid(mesh: THREE.Mesh) {
+    const divisions = [mesh.scale.x, mesh.scale.y, mesh.scale.z]
+      .map(size => Math.max(1, Math.ceil(size / .65)))
+    const points: number[] = []
+    for (let axis = 0; axis < 3; axis++) {
+      const u = (axis + 1) % 3, v = (axis + 2) % 3
+      for (const side of [-.5, .5]) {
+        for (const [along, across] of [[u,v], [v,u]]) {
+          for (let i = 1; i < divisions[along!]!; i++) {
+            const start = [0,0,0], end = [0,0,0]
+            start[axis] = end[axis] = side
+            start[along!] = end[along!] = i / divisions[along!]! - .5
+            start[across!] = -.5; end[across!] = .5
+            points.push(...start, ...end)
           }
-          geom.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-          mesh.userData.feaGeometry = geom
         }
-        // Swap back to MeshStandardMaterial to give 3D contrast and shading,
-        // avoiding the over-saturated flat look.
-        mesh.geometry = mesh.userData.feaGeometry
-        material.vertexColors = true
-        material.color.setHex(0xffffff)
-        // Add a slight emissive boost so the colors still pop in shadows
-        material.emissive.setHex(0x222222)
-        material.roughness = 0.7
-        material.metalness = 0.1
-        material.needsUpdate = true
-        lineMesh.visible = false
-        // Faint black wireframe overlay
-        const wireMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35, depthTest: true })
-        const wire = new THREE.LineSegments(new THREE.WireframeGeometry(mesh.userData.feaGeometry), wireMat)
-        mesh.add(wire); feaWires.push(wire)
-      } else {
-        mesh.geometry = unit
-        material.vertexColors = false
-        material.color.copy(mesh.userData.baseColor as THREE.Color)
-        material.emissive.setHex(0x000000)
-        material.roughness = mesh.userData.baseRoughness as number
-        material.metalness = mesh.userData.baseMetalness as number
-        material.needsUpdate = true
-        mesh.visible = true
-        lineMesh.visible = true
-        ;(lineMesh.material as THREE.LineBasicMaterial).color.setHex(0x8caaa0)
-        ;(lineMesh.material as THREE.LineBasicMaterial).opacity = 0.19
       }
     }
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3))
+    return new THREE.LineSegments(geometry, feaMeshMaterial)
+  }
+  function showFEA(enabled: boolean) {
+    grid.visible = !isElevation
+    connectionBolts.material = enabled ? feaMaterial : boltMaterial
+    for (const mesh of meshes) {
+      const outline = mesh.children[0] as THREE.LineSegments
+      if (!mesh.userData.architecturalMaterial) {
+        mesh.userData.architecturalMaterial = mesh.material
+        mesh.userData.architecturalOutline = outline.material
+      }
+      mesh.material = enabled ? feaMaterial : mesh.userData.architecturalMaterial
+      outline.material = enabled ? feaEdgeMaterial : mesh.userData.architecturalOutline
+      if (enabled && !mesh.userData.isConnection && !feaGrids.has(mesh)) {
+        const cells = surfaceGrid(mesh)
+        mesh.add(cells); feaGrids.set(mesh, cells)
+      }
+      const cells = feaGrids.get(mesh)
+      if (cells) cells.visible = enabled
+    }
+    canvas.setAttribute('aria-label', enabled
+      ? 'Illustrative FEA contour view of the original bridge. Blue at midspan through cyan, green, yellow and red at the supports. Not computed analysis results.'
+      : 'Interactive 3D steel bridge. Drag or use arrow keys to orbit, plus and minus to zoom, Home to reset.')
     render()
   }
   let yaw=-.9, pitch=.43, distance=28, alive=true, visible=true, isElevation=false
@@ -269,18 +315,20 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
       else distance=THREE.MathUtils.clamp(distance*factor,18,42)
       render()
     },
-    elevation(enabled) { isElevation=enabled; camera=enabled?orthographic:perspective; grid.visible=!enabled && !feaModeActive; render() },
+    elevation(enabled) { isElevation=enabled; camera=enabled?orthographic:perspective; grid.visible=!enabled; render() },
     fea: showFEA,
-    reset() { yaw=-.9; pitch=.43; distance=28; orthographic.zoom=1; orthographic.updateProjectionMatrix(); isElevation=false; camera=perspective; if(!feaModeActive) grid.visible=true; render() },
+    reset() { yaw=-.9; pitch=.43; distance=28; orthographic.zoom=1; orthographic.updateProjectionMatrix(); isElevation=false; camera=perspective; grid.visible=true; render() },
     dispose() {
       if(!alive) return
       alive=false; resizeObserver.disconnect(); intersection.disconnect()
       canvas.removeEventListener('pointerdown',down); canvas.removeEventListener('pointermove',move); canvas.removeEventListener('pointerup',up); canvas.removeEventListener('pointercancel',cancel)
       canvas.removeEventListener('keydown',keydown); canvas.removeEventListener('webglcontextlost',lost)
-      feaWires.forEach(w => { w.geometry.dispose(); (w.material as THREE.Material).dispose() })
-      unit.dispose(); edges.dispose(); feaBoxGeom.dispose()
+      feaGrids.forEach(cells => cells.geometry.dispose())
+      feaMaterial.dispose(); feaEdgeMaterial.dispose(); feaMeshMaterial.dispose()
+      connectionGeometries.forEach(geometry => geometry.dispose())
+      connectionBolts.dispose(); boltGeometry.dispose(); boltMaterial.dispose()
+      unit.dispose(); edges.dispose(); concreteTex.dispose(); topChordSteel.dispose(); connectionSteel.dispose()
       trussSteel.dispose(); deckSteel.dispose(); bracingSteel.dispose(); railSteel.dispose(); road.dispose(); concrete.dispose(); lineMaterial.dispose()
-      meshes.forEach(mesh => { if(mesh.userData.feaGeometry) mesh.userData.feaGeometry.dispose() })
       materials.forEach(material=>material.dispose()); outlines.forEach(material=>material.dispose())
       grid.geometry.dispose(); grid.material.dispose(); renderer.dispose(); canvas.remove()
     },

@@ -1,10 +1,13 @@
 :root {
-  --bg: #141a19;
-  --surface: #18211e;
-  --surface-raised: #202b26;
+  --bg: #101815;
+  --surface: #141f1a;
+  --surface-raised: #1c2722;
   --text: #eeeFE9;
   --muted: #b0b9b2;
-  --accent: #aed0c4;
+  --accent: #6bb9e3;
+  --accent-hover: #8bcbed;
+  --accent-soft: #6bb9e314;
+  --accent-selected: #6bb9e31f;
   --line: #34463e;
   --line-strong: #69887c;
   --sans: 'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
