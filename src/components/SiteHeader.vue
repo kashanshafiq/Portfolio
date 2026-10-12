@@ -36,10 +36,9 @@ nav a {
   white-space: nowrap;
 }
 
-@media (min-width: 761px) and (max-width: 1280px) {
+@media (min-width: 961px) and (max-width: 1280px) {
   nav {
     gap: 18px !important;
-    font-size: 0.82rem !important;
   }
 }
 </style>

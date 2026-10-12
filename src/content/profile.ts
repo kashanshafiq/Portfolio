@@ -2,7 +2,7 @@ export const profile = {
   name: 'Kashan Shafiq',
   field: 'Civil engineering & digital construction',
   introduction: 'I work across structural design, BIM, and the tools that connect engineering ideas to practice.',
-  biography: 'I am a civil engineering graduate from COMSATS University Islamabad, Wah Campus. My work connects structural analysis with digital modelling, from reinforced-concrete design and calculation spreadsheets to Scan-to-BIM and augmented reality.',
+  biography: 'Civil Engineer with strong fundamentals in structural analysis and RC design, backed by hands-on ETABS/SAFE modeling experience. My Final Year Project integrated BIM with AR to enable constructability checks during design and clearer stakeholder communication, reducing rework and supporting sustainable design practice. Complemented by a proactive, leadership-driven approach, this grounds my pursuit of graduate research in structural dynamics, finite element methods, advanced materials, and sustainable design.',
   education: { degree: 'BS Civil Engineering', institution: 'COMSATS University Islamabad, Wah Campus', period: '2022–2026', cgpa: '3.95 / 4.00', distinction: 'Gold Medalist · First in graduating class' },
   interests: ['Structural analysis and design', 'Building information modelling', 'Digital construction', 'Augmented reality for engineering'],
   // Add confirmed public details only. Empty fields are not rendered as links.

@@ -39,15 +39,15 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
     return tex
   }
   const concreteTex = createConcreteTexture()
-  const trussSteel = new THREE.MeshStandardMaterial({ color: 0x86a99a, metalness: .6, roughness: .4 })
-  const topChordSteel = new THREE.MeshStandardMaterial({ color: 0x86a99a, metalness: .6, roughness: .4 })
+  const trussSteel = new THREE.MeshStandardMaterial({ color: 0x21a65d, metalness: .6, roughness: .4 })
+  const topChordSteel = new THREE.MeshStandardMaterial({ color: 0x21a65d, metalness: .6, roughness: .4 })
   const connectionSteel = new THREE.MeshStandardMaterial({ color: 0x162d4a, metalness: .75, roughness: .35 })
-  const deckSteel = new THREE.MeshStandardMaterial({ color: 0x7b9b8c, metalness: .6, roughness: .5 })
-  const bracingSteel = new THREE.MeshStandardMaterial({ color: 0x93b6a5, metalness: .5, roughness: .4 })
+  const deckSteel = new THREE.MeshStandardMaterial({ color: 0x1b874c, metalness: .6, roughness: .5 })
+  const bracingSteel = new THREE.MeshStandardMaterial({ color: 0x27b868, metalness: .5, roughness: .4 })
   const railSteel = new THREE.MeshStandardMaterial({ color: 0x111312, metalness: .5, roughness: .5 })
   const road = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: .9 })
   const concrete = new THREE.MeshStandardMaterial({ map: concreteTex, roughness: 1 })
-  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x8caaa0, transparent: true, opacity: .19 })
+  const lineMaterial = new THREE.LineBasicMaterial({ color: 0x36b870, transparent: true, opacity: .19 })
   const unit = new THREE.BoxGeometry(1, 1, 1), edges = new THREE.EdgesGeometry(unit)
   const meshes: THREE.Mesh[] = []
   function box(group: THREE.Group, x: number, y: number, z: number, w: number, h: number, d: number, material: THREE.MeshStandardMaterial) {
@@ -281,33 +281,72 @@ export function createBridgeViewer(host: HTMLElement, onOrbit: () => void, onFai
   function resize() {
     const {width,height}=host.getBoundingClientRect()
     if(!width || !height) return
-    perspective.aspect=width/height; perspective.updateProjectionMatrix()
-    orthographic.left=-10.5; orthographic.right=10.5
-    orthographic.top=10.5*height/width; orthographic.bottom=-orthographic.top
-    orthographic.updateProjectionMatrix(); renderer.setSize(width,height,false); render()
+    const aspect = width / height
+    perspective.aspect = aspect
+    if (aspect < 1.45) {
+      perspective.fov = 34 + (1.45 - aspect) * 16
+    } else {
+      perspective.fov = 34
+    }
+    perspective.updateProjectionMatrix()
+    const halfSpan = aspect < 1.2 ? 11.2 : 10.5
+    orthographic.left = -halfSpan
+    orthographic.right = halfSpan
+    orthographic.top = halfSpan * height / width
+    orthographic.bottom = -orthographic.top
+    orthographic.updateProjectionMatrix()
+    renderer.setSize(width,height,false)
+    render()
   }
   const resizeObserver=new ResizeObserver(resize); resizeObserver.observe(host)
   const intersection=new IntersectionObserver(([entry]) => { visible=!!entry?.isIntersecting; if(visible) render() }); intersection.observe(host)
   let pointer: {lastX:number;lastY:number;id:number} | undefined
+  let isPointerCaptured = false
   function down(event: PointerEvent) {
     if(!event.isPrimary || event.button!==0) return
-    canvas.focus({preventScroll:true})
-    pointer={lastX:event.clientX,lastY:event.clientY,id:event.pointerId}
-    canvas.setPointerCapture(event.pointerId)
+    pointer = {lastX:event.clientX,lastY:event.clientY,id:event.pointerId}
+    isPointerCaptured = false
+    if(event.pointerType !== 'touch') {
+      try { canvas.setPointerCapture(event.pointerId); isPointerCaptured = true } catch {}
+      canvas.focus({preventScroll:true})
+    }
   }
   function move(event: PointerEvent) {
     if(!pointer || event.pointerId!==pointer.id) return
+    const dx = event.clientX - pointer.lastX
+    const dy = event.clientY - pointer.lastY
+    if(event.pointerType === 'touch') {
+      if(!isPointerCaptured) {
+        if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 6) {
+          try { canvas.setPointerCapture(event.pointerId); isPointerCaptured = true } catch {}
+        } else if(Math.abs(dy) > 8) {
+          pointer = undefined
+          return
+        } else {
+          return
+        }
+      }
+    }
     orbit()
-    yaw-=(event.clientX-pointer.lastX)*.008
-    pitch=THREE.MathUtils.clamp(pitch+(event.clientY-pointer.lastY)*.006,.08,1.25)
-    pointer.lastX=event.clientX; pointer.lastY=event.clientY; render()
+    yaw -= dx * 0.008
+    pitch = THREE.MathUtils.clamp(pitch + dy * 0.006, 0.08, 1.25)
+    pointer.lastX = event.clientX; pointer.lastY = event.clientY; render()
   }
   function up(event: PointerEvent) {
     if(!pointer || event.pointerId!==pointer.id) return
-    pointer=undefined
-    if(canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId)
+    if(isPointerCaptured && canvas.hasPointerCapture(event.pointerId)) {
+      try { canvas.releasePointerCapture(event.pointerId) } catch {}
+    }
+    pointer = undefined
+    isPointerCaptured = false
   }
-  function cancel() { pointer=undefined }
+  function cancel(event?: PointerEvent) {
+    if(pointer && event && canvas.hasPointerCapture(event.pointerId)) {
+      try { canvas.releasePointerCapture(event.pointerId) } catch {}
+    }
+    pointer = undefined
+    isPointerCaptured = false
+  }
   const api: BridgeViewer = {
     rotate(angle) { orbit(); yaw+=angle; render() },
     zoom(factor) {

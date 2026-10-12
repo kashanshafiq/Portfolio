@@ -2,15 +2,41 @@ export interface AcademicCvData {
   personalInfo: {
     name: string
     title: string
+    keywords: string
     degreeSummary: string
     institution: string
     email: string
-    phone?: string
+    phone: string
+    whatsapp: string
     location: string
+    nationality: string
     linkedin: string
     portfolioUrl: string
     summary: string
   }
+  education: Array<{
+    degree: string
+    institution: string
+    period: string
+    location: string
+    fieldOfStudy: string
+    grade: string
+    eqfLevel: string
+    distinction?: string
+    thesis?: string
+    courses?: string[]
+  }>
+  researchExperience: Array<{
+    title: string
+    period: string
+    role: string
+    organization: string
+    summary: string
+    highlights: string[]
+    link?: string
+    doi?: string
+    venue?: string
+  }>
   workExperience: Array<{
     role: string
     organization: string
@@ -20,37 +46,18 @@ export interface AcademicCvData {
     responsibilities: string[]
     tools: string[]
   }>
-  education: Array<{
-    degree: string
-    institution: string
-    period: string
-    distinction?: string
-    metrics?: string
-    highlights?: string[]
+  projects: Array<{
+    title: string
+    description: string
+    tools: string[]
   }>
-  researchAndProjects: {
-    researchPreprint: {
-      title: string
-      status: string
-      period: string
-      venue: string
-      doi: string
-      authors: string[]
-      summary: string
-    }
-    projects: Array<{
-      title: string
-      course: string
-      tools: string[]
-      description: string
-    }>
-  }
   certifications: Array<{
     title: string
     issuer: string
-    date: string
+    date?: string
     credentialId?: string
     detail: string
+    link?: string
   }>
   professionalTrainings: {
     cpdSeminars: Array<{
@@ -58,69 +65,121 @@ export interface AcademicCvData {
       speaker: string
       points: string
       date: string
+      detail: string
+      link?: string
     }>
     workshops: Array<{
       title: string
       organizer: string
       date: string
-    }>
-  }
-  conferences: Array<{
-    title: string
-    role: string
-    organizer: string
-    date: string
-    detail: string
-  }>
-  languages: Array<{
-    language: string
-    proficiency: string
-    note: string
-  }>
-  extracurricular: {
-    fellowships: Array<{
-      title: string
-      organization: string
-      period: string
       detail: string
+      link?: string
     }>
-    competitions: Array<{
+    conferences: Array<{
       title: string
-      award: string
-      event: string
+      role: string
       organizer: string
       date: string
+      detail: string
+      link?: string
     }>
   }
-  volunteer: Array<{
-    title: string
-    role: string
-    organization: string
-    period: string
-    detail: string
-  }>
+  skills: {
+    coreCompetencies: string[]
+    softwareAndTools: string[]
+    softSkills: string[]
+  }
   honorsAndAwards: Array<{
     title: string
     category: 'Gold Medal' | 'Scholarship' | 'Merit Position' | 'Competition' | 'FYP Award'
     awarder: string
     period: string
     detail: string
+    link?: string
+  }>
+  volunteering: Array<{
+    title: string
+    organization?: string
+    location?: string
+    period: string
+    detail: string
+    link?: string
+  }>
+  extracurricular: Array<{
+    title: string
+    period?: string
+    detail: string
+    link?: string
+  }>
+  languages: Array<{
+    language: string
+    level: string
+    detail: string
+    isMotherTongue?: boolean
   }>
 }
 
 export const academicCv: AcademicCvData = {
   personalInfo: {
     name: 'Kashan Shafiq',
-    title: 'Civil Engineer · Junior BIM Modeler (Scan-to-BIM Specialist)',
-    degreeSummary: 'BS Civil Engineering (Gold Medalist, 1st in Class, CGPA 3.95 / 4.00)',
+    title: 'Civil Engineer',
+    keywords: 'Gold Medalist · Civil Engineer',
+    degreeSummary: 'BS in Civil Engineering · CGPA 3.95/4.00 (98%) · Gold Medalist',
     institution: 'COMSATS University Islamabad, Wah Campus',
     email: 'kashankashi27@gmail.com',
-    location: 'Islamabad / Wah Cantt, Pakistan',
+    phone: '(+92) 3155915676',
+    whatsapp: '+923155915676',
+    location: '47040, Wah Cantt / Islamabad, Pakistan',
+    nationality: 'Pakistani',
     linkedin: 'https://www.linkedin.com/in/kashan-shafiq-11764229b/',
     portfolioUrl: 'https://kashanshafiq.com',
     summary:
-      'Civil engineering graduate with top academic standing (CGPA 3.95 / 4.00, Gold Medalist). Specializing in Building Information Modeling (BIM), Scan-to-BIM point cloud reconstruction, structural analysis and finite element design (ETABS, SAFE, ACI 318), and augmented reality integration for digital construction workflows.',
+      'Civil Engineer with strong fundamentals in structural analysis and RC design, backed by hands-on ETABS/SAFE modeling experience. My Final Year Project integrated BIM with AR to enable constructability checks during design and clearer stakeholder communication, reducing rework and supporting sustainable design practice. Complemented by a proactive, leadership-driven approach, this grounds my pursuit of graduate research in structural dynamics, finite element methods, advanced materials, and sustainable design.',
   },
+
+  education: [
+    {
+      degree: 'BS IN CIVIL ENGINEERING',
+      institution: 'Comsats University Islamabad, Wah Campus',
+      period: '2022/09/12 – 2026/07/06',
+      location: 'Wah Cantt, Pakistan',
+      fieldOfStudy: 'Building and civil engineering',
+      grade: 'Final grade 3.95/4 (98%)',
+      eqfLevel: 'EQF level 6',
+      distinction: 'Gold Medalist · 1st in Graduating Class across all 8 Semesters',
+      thesis: 'BIM-to-AR Integration for Construction Layout Visualization',
+      courses: [
+        'Reinforced Concrete Design I & II',
+        'Design of structures',
+        'Structural Analysis (Determinate & Indeterminate)',
+        'Matrix Analysis of Structures',
+        'Steel Structures',
+        'Geotechnical & Foundation Engineering',
+        'Properties of Concrete',
+        'Engineering Materials',
+        'Project Planning & Management',
+      ],
+    },
+  ],
+
+  researchExperience: [
+    {
+      title: 'BIM-to-AR Integration for Construction Layout Visualization — Final Year Project',
+      period: '2025/09/01 – 2026/05/29',
+      role: 'Lead Researcher & Developer',
+      organization: 'Department of Civil Engineering, COMSATS University Islamabad, Wah Campus',
+      summary:
+        'Standardized BIM-to-AR mobile deployment framework converting Autodesk Revit geometries into real-time Android AR applications for on-site layout verification and clash detection.',
+      highlights: [
+        'Built a standardized BIM-to-AR pipeline converting Revit models into Android AR apps for real-time on-site layout verification.',
+        'Developed and field-validated three Unity-based AR deployment modes — marker-based, ground-plane, GPS-anchored — within acceptable construction tolerances.',
+        'Integrated model scaling, transparency control, and component-level visibility toggling for structural/architectural/MEP inspection without specialist hardware.',
+      ],
+      link: '/research/bim-to-ar',
+      doi: 'https://doi.org/10.2139/ssrn.6884926',
+      venue: 'SSRN Electronic Journal & 3rd Position at CUI Open House & Job Fair 2026',
+    },
+  ],
 
   workExperience: [
     {
@@ -137,441 +196,493 @@ export const academicCv: AcademicCvData = {
       tools: ['Autodesk Revit', 'Point Cloud Data', 'AutoCAD', 'LOD 300/350'],
     },
     {
-      role: 'Management Trainee / BIM Engineering Intern',
-      organization: 'Mount Khalid (45-Storey Residential High-Rise Tower)',
-      location: 'Gulberg Greens, Islamabad, Pakistan',
-      period: 'July 2025 – August 2025 (8 Weeks)',
-      scope: 'High-Rise Residential Tower BIM Modeling & Construction Coordination',
+      role: 'ENGINEERING INTERNEE',
+      organization: 'MOUNT KHALID',
+      location: 'ISLAMABAD, PAKISTAN',
+      period: '2025/07/07 – 2025/08/25',
+      scope: '45-Storey High-Rise Residential Tower Construction & BIM Coordination',
       responsibilities: [
-        'Contributed to the multi-discipline BIM modeling workflow for a flagship 45-storey high-rise residential tower.',
-        'Directly modeled and managed over 70,000 BIM elements in Autodesk Revit adhering to LOD 300 criteria.',
-        'Collaborated with Senior Project Managers and structural teams during design reviews, site verification, and construction schedule tracking.',
+        'Supported field and technical teams on a 45-storey high-rise residential tower, coordinating BIM information with site execution requirements.',
+        'Modeled 70,000+ structural and architectural elements to LOD 300 in Autodesk Revit, including RC columns, beams, posttensioned slabs, and facades.',
+        'Gained hands-on exposure to post-tensioned slab construction, including coordination of PT slab elements with structural and architectural requirements.',
+        'Reviewed clash-detection outputs and supported Structural–Architectural coordination for a post-tensioned, high-strength concrete building using concrete strengths of approximately 5,000–10,600 psi.',
       ],
-      tools: ['Autodesk Revit', 'AutoCAD', 'Primavera P6', 'BIM Coordination'],
+      tools: ['Autodesk Revit', 'PT Slab Coordination', 'LOD 300', 'Clash Detection', 'High-Rise Construction'],
     },
     {
-      role: 'Management Trainee Engineer (Site Management & Estimation)',
-      organization: 'Shoukat Iqbal Mir & Co. (SIMCO)',
-      location: 'Wah Cantt / Rawalpindi, Pakistan',
-      period: 'July 2024 (1 Month)',
-      scope: 'Field Engineering, Total Station Layout & Quantity Estimation',
+      role: 'ENGINEERING INTERNEE',
+      organization: 'SIMCO',
+      location: 'ISLAMABAD, PAKISTAN',
+      period: '2024/07/01 – 2024/07/31',
+      scope: 'Site Management, Field Execution, QA/QC Inspection & Quantity Take-offs',
       responsibilities: [
-        'Interpreted structural engineering working drawings, bar bending schedules, and architectural specifications on-site.',
-        'Executed site layout benchmarks, leveling, and total station control point setup.',
-        'Conducted material quantity takeoffs, daily progress logs, and field quality assurance inspections during concrete pours.',
+        'Interpreted and cross-checked structural, architectural, and site-layout drawings against live construction activities, identifying discrepancies for engineer review.',
+        'Supported field execution and inspection activities, including slab-related construction exposure, reinforcement, formwork, and concrete works.',
+        'Performed QA/QC checks on concrete curing, formwork, and rebar cover and reported observations to improve compliance with construction requirements.',
+        'Calculated full-floor steel reinforcement weights and performed quantity take-offs for bricks, steel, and concrete, supporting material requisition and BOQ reconciliation.',
       ],
-      tools: ['Total Station', 'AutoCAD', 'Quantity Takeoff', 'Site Supervision'],
+      tools: ['Drawing Interpretation', 'Site QA/QC', 'Reinforcement Inspection', 'Quantity Take-offs', 'BOQ Reconciliation'],
     },
   ],
 
-  education: [
+  projects: [
     {
-      degree: 'Bachelor of Science in Civil Engineering (BS Civil Engineering)',
-      institution: 'COMSATS University Islamabad, Wah Campus, Pakistan',
-      period: 'September 2022 – July 2026',
-      distinction: 'University Gold Medalist · 1st Position in Graduating Class across all 8 Semesters',
-      metrics: 'CGPA: 3.95 / 4.00 (541.26 Credit Points across 137 Credit Hours, 98% Aggregate)',
-      highlights: [
-        'Core structural portfolio: Reinforced Concrete Design I & II, Design of Structures, Steel Structures, Matrix Analysis of Structures, Indeterminate Structural Analysis.',
-        'Infrastructure & Geotech portfolio: Geotechnical & Foundation Engineering, Soil Mechanics, Engineering Hydrology, Water Supply & Wastewater Engineering, Geometric Highway Design.',
-        'Awarded 7 Departmental Semester Merit Position Certificates (1st & 2nd positions) and the competitive Pakistan Ordnance Factory (POF) Merit Scholarship in 5 semesters.',
-      ],
+      title: 'Structural Analysis & Design of Commercial Building',
+      description:
+        'Modeled and designed a moment-resisting RC frame with shear walls, slabs, and footings for gravity and seismic loads (BCP-2021), per ACI 318-19 provisions; performed manual footing sizing with one-way/two-way shear checks and verified foundation design in SAFE.',
+      tools: ['ETABS', 'SAFE', 'ACI 318-19', 'BCP-2021', 'Shear Walls'],
     },
     {
-      degree: 'Higher Secondary School Certificate (HSSC / Pre-Engineering)',
-      institution: 'Federal / Rawalpindi Board Context, Pakistan',
-      period: '2020 – 2022',
-      metrics: 'Pre-Engineering Science Curriculum (Mathematics, Physics, Chemistry)',
-      highlights: [
-        'Rigorous secondary STEM foundation; tested twice before ISSB (Army Selection & Recruitment Centre, Rawalpindi / Kohat).',
-      ],
+      title: 'Three-Story RC School Building Design',
+      description:
+        'Performed manual RC design per ACI 318-14/ASCE 7 for one-way slabs, singly/doubly reinforced beams, and columns; verified via AutoCAD/Revit structural drafts.',
+      tools: ['ACI 318-14', 'ASCE 7', 'AutoCAD', 'Autodesk Revit', 'RC Design'],
     },
     {
-      degree: 'Secondary School Certificate (SSC / Science Group)',
-      institution: 'Secondary School Education Board, Pakistan',
-      period: '2018 – 2020',
-      metrics: 'Science Curriculum (Mathematics, Physics, Chemistry, Computer Science)',
+      title: 'Design of Gravity and Cantilever Retaining Walls',
+      description:
+        'Built parametric Excel sheets for stability analysis (overturning, sliding, bearing capacity) with shear key and reinforcement detailing per code.',
+      tools: ['Parametric Excel', 'Stability Analysis', 'Rankine Earth Pressure', 'Retaining Walls'],
+    },
+    {
+      title: 'Quantity Surveying and Material Estimation',
+      description:
+        'Executed CAD-based material takeoffs and formulated BOQs (Bill of Quantities) for architectural and structural members of the building, including reinforcement, to support cost estimation.',
+      tools: ['CAD Takeoffs', 'BOQ Formulation', 'Reinforcement Estimation', 'Costing'],
+    },
+    {
+      title: 'Haroon Residence — BIM Design & Modeling',
+      description:
+        'Designed a CDA-compliant double-storey residence in Revit, producing full 2D/3D documentation and material take-offs while optimizing space utilization.',
+      tools: ['Autodesk Revit', 'CDA Guidelines', '2D/3D Documentation', 'Space Optimization'],
+    },
+    {
+      title: 'Primavera P6 Construction Scheduling — Tricon Villa',
+      description:
+        'Built a 12-month construction schedule using WBS/OBS frameworks, applying Earned Value Analysis to track budget and timeline performance.',
+      tools: ['Primavera P6', 'WBS/OBS', 'Earned Value Analysis', 'CPM Scheduling'],
+    },
+    {
+      title: 'Evaluation of Recycled Aggregate Concrete',
+      description:
+        'Investigated mechanical properties of concrete with 50% recycled aggregates, evaluating compressive strength, dry density, and workability for sustainable mix design.',
+      tools: ['Recycled Aggregates', 'Compressive Strength', 'Workability Tests', 'Sustainable Mix Design'],
+    },
+    {
+      title: 'Indeterminate Structural Analysis (RISA2D vs. Manual)',
+      description:
+        'Validated support reactions, deflections, and shear/bending moment diagrams by comparing manual calculations against RISA2D output.',
+      tools: ['RISA-2D', 'Manual Calculations', 'SFD & BMD', 'Deflection Analysis'],
+    },
+    {
+      title: 'Soil Bearing Capacity Analysis',
+      description:
+        'Conducted direct shear tests (ASTM D3080) and applied Terzaghi\'s theories to determine safe bearing capacity for footing design.',
+      tools: ['ASTM D3080', 'Terzaghi Theory', 'Direct Shear Test', 'Bearing Capacity'],
+    },
+    {
+      title: 'Water Treatment Sedimentation-cum-Coagulation Tank',
+      description:
+        'Ran jar tests for optimum alum dosage and designed a scalable sedimentation-cum-coagulation tank per WASA guidelines.',
+      tools: ['Jar Testing', 'Alum Dosage', 'Sedimentation Design', 'WASA Guidelines'],
+    },
+    {
+      title: 'Hydrological Analysis of Colorado River Catchment',
+      description:
+        'Analyzed a 600 sq-km catchment using the SCS-CN method, deriving unit/S-curve/synthetic hydrographs and estimating stream discharge.',
+      tools: ['SCS-CN Method', 'Hydrographs', 'Discharge Estimation', 'Hydrology'],
+    },
+    {
+      title: 'Combined Sewerage System Hydraulic Design',
+      description:
+        'Designed a code-compliant sewerage system for a 102-hectare catchment using EPA-SWMM, incorporating drop manholes to manage steep-terrain flow.',
+      tools: ['EPA-SWMM', 'Hydraulic Modeling', 'Drop Manholes', 'Sewerage Networks'],
     },
   ],
-
-  researchAndProjects: {
-    researchPreprint: {
-      title: 'BIM to Augmented Reality: A Standardized Multimodal Deployment Framework for Construction Layout Visualization',
-      status: 'Preprint Manuscript',
-      period: '2025 – 2026',
-      venue: 'SSRN Electronic Journal',
-      doi: 'https://doi.org/10.2139/ssrn.6884926',
-      authors: ['Hassan Ashraf', 'Faizan Manshad', 'Kashan Shafiq', 'Faiz Fareed'],
-      summary:
-        'Formulated a standardized pipeline transferring Autodesk Revit BIM geometries to mobile augmented-reality engines via FBX and Unity. Evaluated Marker-based, Ground-plane SLAM, and Location-based geospatial AR modalities to verify layout accuracy on-site. Won 3rd Position at CUI Open House & Job Fair 2026.',
-    },
-    projects: [
-      {
-        title: 'Seismic Analysis & Structural Design of RC Residential Building',
-        course: 'Design of Structures (CEE410)',
-        tools: ['ETABS', 'SAFE', 'UBC-97', 'ACI 318'],
-        description:
-          'Constructed full 3D finite element structural model of a multi-story residential building under dead, live, and UBC-97 seismic lateral loads. Evaluated story drifts, beam-column flexural/shear demands, and designed foundation mat and footings in SAFE.',
-      },
-      {
-        title: 'Structural Design of 3-Story School Building (ACI 318-14)',
-        course: 'Reinforced Concrete Design I (CEE308)',
-        tools: ['ACI 318-14', 'ASCE 7-10', 'Structural Calculations'],
-        description:
-          'Executed comprehensive structural engineering calculation package for a 3-story reinforced concrete institutional building on a 120′ × 180′ site. Designed one-way slabs, continuous beams, doubly reinforced members, square columns, and circular spiral columns.',
-      },
-      {
-        title: 'Hydraulic Design of Combined Sewerage System (EPA SWMM)',
-        course: 'Wastewater & Sanitary Engineering (CEE422)',
-        tools: ['EPA SWMM', 'Dynamic Wave Routing', 'Hydraulics'],
-        description:
-          'Modeled stormwater and sanitary wastewater networks for a 102-hectare urban catchment in Wah Cantt (3,835 design population). Optimized pipe invert elevations, drop manholes, and Manning velocity controls under 30 mm/hr and 60 mm/hr rainfall.',
-      },
-      {
-        title: 'Complete Multi-Storey Building Quantity Takeoff & Bar Bending Schedule',
-        course: 'Quantity Surveying & Cost Estimation (CEE304)',
-        tools: ['Microsoft Excel', 'Bar Bending Schedules (BBS)', 'Costing'],
-        description:
-          'Produced an itemized quantity takeoff and reinforcement Bar Bending Schedule (BBS) for a multi-storey building, computing concrete volumes, dry mortar conversions, wastage allowances, and totaling 111,854 kg (~112 tons) of reinforcing steel.',
-      },
-      {
-        title: 'Taxila GT Road Highway Geometric Design & Safety Investigation',
-        course: 'Geometric Design of Highways and Streets (CEE417)',
-        tools: ['AutoCAD Civil 3D', 'AASHTO Green Book', 'Google Earth DTM'],
-        description:
-          'Constructed a digital terrain model (DTM) from geospatial points along a segment of Taxila GT Road, evaluating 11 horizontal curves against AASHTO Green Book design speed, radius, and superelevation criteria.',
-      },
-      {
-        title: 'Project Planning & Scheduling of Residential Villa Construction',
-        course: 'Project Planning and Management (MGT462)',
-        tools: ['Primavera P6', 'CPM Scheduling', 'Resource Allocation'],
-        description:
-          'Formulated full Enterprise Project Structure (EPS), WBS, OBS, and RBS for a 1-year residential villa construction contract. Derived critical path method (CPM) networks, resource usage histograms, and baseline S-curves.',
-      },
-      {
-        title: 'Spreadsheet-Based Design of Gravity and Cantilever Retaining Walls',
-        course: 'Reinforced Concrete Design II (CEE406)',
-        tools: ['Microsoft Excel', 'Rankine Earth Pressure', 'Geotechnical Stability'],
-        description:
-          'Developed automated design sheets calculating Rankine active earth pressures, stability safety factors against overturning, sliding, and bearing capacity, and sizing stem, heel, and toe flexural and shear reinforcement.',
-      },
-    ],
-  },
 
   certifications: [
     {
-      title: 'Master Structural Design of Buildings (Crash Course)',
-      issuer: 'Young Engineers Forum (YEF)',
-      date: 'May 10, 2026',
-      credentialId: 'YEF-MSD-0937',
-      detail: 'Intensive structural analysis and building design course covering concrete framing, load distribution, and structural code detailing.',
-    },
-    {
-      title: 'Revit for Beginners: Architecture, Structures & MEP',
-      issuer: 'VIS Management Consulting Inc., Canada & CISD',
-      date: 'March 7 – May 4, 2025',
-      credentialId: 'OCN: 2315732',
-      detail: 'Comprehensive Building Information Modeling workflow course covering architectural framing, structural concrete/steel detailing, and MEP coordination.',
+      title: 'Master Structural Design of Buildings',
+      issuer: 'Young Engineers Forum / E-Learning',
+      detail:
+        'Learned structural modeling in ETABS, including load application, analysis, and member design, through to detailing and foundation design in SAFE.',
+      link: 'https://drive.google.com/file/d/1j9RUpx5MMwkCiRClTR1IqOeb9s6hflsr/view?usp=sharing',
     },
     {
       title: 'BIM Management: Revit Model Maintenance',
       issuer: 'LinkedIn Learning',
-      date: 'October 10, 2025',
-      credentialId: 'ID: 5d0ab33cc4a43036d165e9f6e8ed0448',
-      detail: 'Professional BIM model health audit, file size optimization, worksharing standards, and family library maintenance.',
+      detail:
+        'Learned techniques for managing worksets, linked models, and file health to maintain large-scale Revit projects.',
+      link: 'https://www.linkedin.com/learning/certificates/5d0ab33cc4a43036d165e9f6e8ed04483b65f8cf1d473311f33721b0e422a6b9?trk=share_certificate&lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B69nE82f7TIu0OCkyapEPFg%3D%3D',
+    },
+    {
+      title: 'Revit For Beginners: Architecture, Structure and MEP',
+      issuer: 'VIS Management Consulting Inc., Canada & CISD',
+      detail:
+        'Learned foundational modeling workflows across architectural, structural, and MEP disciplines, including families, views, and coordination basics.',
+      link: 'https://drive.google.com/file/d/1Fb6-7TqBEhUImUxV9cBBm0OnMCvPKBSF/view?usp=sharing',
     },
     {
       title: 'Learning Revit 2023',
       issuer: 'LinkedIn Learning',
-      date: 'November 2, 2025',
-      credentialId: 'ID: e6a5ba422b1ffb7cf0da5fd91001ef93',
-      detail: 'Core parametric modeling, schedule generation, view templates, and architectural documentation workflows.',
+      detail:
+        'Learned core Revit tools and workflows, including modeling, documentation, and annotation for building design.',
+      link: 'https://www.linkedin.com/learning/certificates/e6a5ba422b1ffb7cf0da5fd91001ef9336326185b0a3e1fa4b3aabc22eef1cc1?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B69nE82f7TIu0OCkyapEPFg%3D%3D',
     },
     {
       title: 'Excel Essential Training (Microsoft 365)',
       issuer: 'LinkedIn Learning',
-      date: 'November 9, 2025',
-      credentialId: 'ID: 478842037430d0dff9eb6fd276e7c600',
-      detail: 'Advanced spreadsheet formulas, data modeling, dynamic lookups, and engineering calculation automation.',
+      detail:
+        'Learned essential Excel functions, formulas, and data management techniques for engineering calculations and reporting.',
+      link: 'https://www.linkedin.com/learning/certificates/478842037430d0dff9eb6fd276e7c600d985d5fe1779f9fe0eef92ccdd0bd0ed?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B69nE82f7TIu0OCkyapEPFg%3D%3D',
+    },
+    {
+      title: 'English for Career Development MOOC — U.S. Dept. of State (OPEN/FHI 360)',
+      issuer: 'U.S. Department of State / FHI 360',
+      detail:
+        'Completed professional English course covering resume and cover letter writing, job interview preparation, and professional networking communication description.',
+      link: 'https://badges.parchment.com/public/assertions/BeVOZH94RU-G_z9Nm9WIgw',
     },
     {
       title: 'Understanding Augmented and Virtual Reality: An Introduction',
       issuer: 'LinkedIn Learning',
-      date: 'November 1, 2025',
-      credentialId: 'ID: 1ef8f65861d44c5211ab728cc9ee99bc',
-      detail: 'Spatial computing principles, SLAM tracking, immersive user interfaces, and mobile AR deployment paradigms.',
-    },
-    {
-      title: 'MidJourney for Architects: AI Image Generation & Animation',
-      issuer: 'Udemy',
-      date: 'April 7, 2025',
-      credentialId: 'UC-1ed0d7e0-e89b-4d8f-a7ef-bca9b406966b',
-      detail: 'AI-assisted architectural conceptualization, rendering prompt engineering, and visual spatial communication.',
+      detail:
+        'Learned foundational AR/VR concepts and applications, complementing BIM-to-AR development work.',
+      link: 'https://www.linkedin.com/learning/certificates/1ef8f65861d44c5211ab728cc9ee99bc7eeaab7591b59f17d0b98010cfa9ecba?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3Bx3RBNdQ2S2uaT6W%2BgzFMYQ%3D%3D',
     },
   ],
 
   professionalTrainings: {
     cpdSeminars: [
       {
-        title: 'Applications of GIS and Remote Sensing in Civil Engineering',
-        speaker: 'Engr. Dr. M. Usman Arshid',
-        points: '1.0 CPD Credit Point',
-        date: '12 February 2026',
-      },
-      {
-        title: 'Finite Element Method: A Modern Tool for Structural Analysis',
+        title: 'Finite Element Method: A Modern Tool for Structural Analysis in Civil Engineering',
         speaker: 'Dr. Engr. Zahid Shabir',
         points: '1.0 CPD Credit Point',
         date: '15 May 2025',
-      },
-      {
-        title: 'Variation Orders as per FIDIC Conditions of Contract',
-        speaker: 'Engr. Sadaqat Hussain',
-        points: '1.0 CPD Credit Point',
-        date: '8 October 2025',
-      },
-      {
-        title: 'Contemporary Strategies for the Restoration and Preservation of National Heritages',
-        speaker: 'Prof. Dr. Anwar Khitab',
-        points: '1.0 CPD Credit Point',
-        date: '20 February 2025',
-      },
-      {
-        title: 'Sustainable Urban Planning and Design',
-        speaker: 'Ms. Fauzia Rizwan',
-        points: '1.0 CPD Credit Point',
-        date: '24 September 2025',
-      },
-      {
-        title: 'Modeling and Analyzing Rut Depth in Asphalt Mixtures for Sustainable Road Performance',
-        speaker: 'Dr. Sabahat Hassan',
-        points: '1.0 CPD Credit Point',
-        date: '12 December 2024',
-      },
-      {
-        title: 'Non-Destructive Test Methods for Concrete Bridges',
-        speaker: 'Dr. Sardar Kashif ur Rehman',
-        points: '1.0 CPD Credit Point',
-        date: '30 May 2024',
-      },
-      {
-        title: 'Integrating Technologies in Civil Engineering',
-        speaker: 'Dr. Naveed Anwar',
-        points: '0.5 CPD Credit Point',
-        date: '27 September 2023',
+        detail:
+          'Explored FEM applications for structural analysis and modeling, covering conceptual and practical use in civil engineering design.',
+        link: 'https://drive.google.com/file/d/1LNap1LuGvWt-hezr-q3R4-YNzVEC2G7k/view?usp=sharing',
       },
       {
         title: 'Impact of Machine Learning in the Field of Civil Engineering',
         speaker: 'Dr. Muhammad Faisal Javed',
         points: '0.5 CPD Credit Point',
         date: '13 October 2022',
+        detail:
+          'Explored how ML techniques are transforming design, analysis, and decision-making processes in civil engineering.',
+        link: 'https://drive.google.com/file/d/1K2QLNO9ofBrE-9ePgWVLkK-pKHoMjmD9/view?usp=sharing',
+      },
+      {
+        title: 'Integrating Technologies in Civil Engineering',
+        speaker: 'Dr. Naveed Anwar',
+        points: '0.5 CPD Credit Point',
+        date: '27 September 2023',
+        detail:
+          'Explored emerging digital tools and technology integration strategies across civil engineering practice and project delivery.',
+        link: 'https://drive.google.com/file/d/1_BuWOnIMk3DTXkhCPAZAhcSuBluB00Zr/view?usp=sharing',
+      },
+      {
+        title: 'Contemporary Strategies for the Restoration and Preservation of National Heritages',
+        speaker: 'Prof. Dr. Anwar Khitab',
+        points: '1.0 CPD Credit Point',
+        date: '20 February 2025',
+        detail:
+          'Learned modern restoration and preservation strategies and techniques for heritage structures.',
+        link: 'https://drive.google.com/file/d/1MUAemqSaowgMKSIV7xFlarj4PZNP-U2D/view?usp=sharing',
+      },
+      {
+        title: 'Non-Destructive Test Methods for Concrete Bridge',
+        speaker: 'Dr. Sardar Kashif ur Rehman',
+        points: '1.0 CPD Credit Point',
+        date: '30 May 2024',
+        detail:
+          'Learned NDT techniques and methods for assessing structural condition and integrity of concrete bridges.',
+        link: 'https://drive.google.com/file/d/1_jv4n32isZyCARbVg_eJ7QQiFS2GsOS2/view?usp=sharing',
+      },
+      {
+        title: 'Modeling and Analyzing Rut Depth in Asphalt Mixtures for Sustainable Road Performance',
+        speaker: 'Dr. Sabahat Hassan',
+        points: '1.0 CPD Credit Point',
+        date: '12 December 2024',
+        detail:
+          'Learned rut depth modeling and analysis techniques for evaluating asphalt mixture performance sustainably.',
+        link: 'https://drive.google.com/file/d/1kz4RBRwWZuscXXqaSLyNtTrfSr4aKkqx/view?usp=sharing',
+      },
+      {
+        title: 'Sustainable Urban Planning and Design',
+        speaker: 'Ms. Fauzia Rizwan',
+        points: '1.0 CPD Credit Point',
+        date: '24 September 2025',
+        detail:
+          'Explored sustainable planning principles and design strategies for liveable, resilient urban development.',
+        link: 'https://drive.google.com/file/d/12EN9hVUo4pIIEXHoD42JODfV4SnJweIa/view?usp=sharing',
+      },
+      {
+        title: 'Application of GIS and Remote Sensing in Civil Engineering',
+        speaker: 'Engr. Dr. M. Usman Arshid',
+        points: '1.0 CPD Credit Point',
+        date: '12 February 2026',
+        detail:
+          'Explored GIS and remote sensing applications for spatial analysis and data-driven decision-making in civil engineering.',
+        link: 'https://drive.google.com/file/d/1RoCqKQ3vyjRd73AMPWbMT_N29kiMX-81/view?usp=sharing',
+      },
+      {
+        title: 'Variation Order as per FIDIC Conditions of Contract',
+        speaker: 'Engr. Sadaqat Hussain',
+        points: '1.0 CPD Credit Point',
+        date: '8 October 2025',
+        detail:
+          'Learned procedures and provisions for managing variation orders under FIDIC contract frameworks in construction projects.',
+        link: 'https://drive.google.com/file/d/1e0KIXDgLJ5XrxpWqdjG0VwkgX0OlTsSL/view?usp=sharing',
       },
     ],
     workshops: [
       {
-        title: 'One Day Workshop on "Introduction to R"',
+        title: 'One Day Workshop on Introduction to R',
         organizer: 'UNESCO Chair on Knowledge Systems for IWRM, CUI Wah Campus',
         date: '23 November 2023',
+        detail:
+          'Learned R programming basics for statistical analysis and data handling relevant to engineering applications.',
+        link: 'https://drive.google.com/file/d/1_ZmipWgwsPNcgC6HoDpWtbLZnLk4t9_Z/view?usp=sharing',
       },
       {
-        title: 'One Day Webinar on "Application of AI/ML in Civil Engineering"',
+        title: 'Application of AI/ML in Civil Engineering',
         organizer: 'Pakistan Engineers Forum (PEF - KP/GB)',
         date: '12 September 2024',
+        detail:
+          'Explored real-world AI/ML use cases and emerging applications transforming civil engineering practice.',
+        link: 'https://drive.google.com/file/d/1kUDX_QuVzu1-hVRCnTFdDtrB_kQ2r_Ze/view?usp=sharing',
+      },
+    ],
+    conferences: [
+      {
+        title: '4th UW-POFS Joint Conference (CACIO-2024)',
+        role: 'Participant & Delegate',
+        organizer: 'University of Wah & Pakistan Ordnance Factories (POF)',
+        date: '18 December 2024',
+        detail:
+          'Participated in discussions on strengthening academia-industry collaboration and knowledge transfer.',
+        link: 'https://drive.google.com/file/d/1gx7JpF5WSFIM3Tus0QckErt1_dqvQqnL/view?usp=sharing',
       },
     ],
   },
 
-  conferences: [
+  skills: {
+    coreCompetencies: [
+      'Structural Analysis & Design',
+      'Reinforced Concrete Design (ACI 318-19)',
+      'Steel Structure Design (AISC)',
+      'Seismic & Gravity Load Analysis (ASCE 7-16, UBC 97)',
+      'Reinforcement Detailing & Foundation Design',
+      'Post-Tensioned Slab Coordination',
+      'Manual & Software-Based Structural Verification',
+      'BIM-Integrated Structural Coordination',
+      'Quantity Takeoff & Cost Estimation',
+      'Site QA/QC Inspection',
+    ],
+    softwareAndTools: [
+      'ETABS',
+      'SAFE',
+      'RISA 2D',
+      'Autodesk Revit (Structure & Architecture, LOD 200–400)',
+      'AutoCAD 2D',
+      'Microsoft Office',
+      'Microsoft Excel (Parametric Design Sheets)',
+    ],
+    softSkills: [
+      'Leadership & Team Coordination',
+      'Critical Thinking & Problem-Solving',
+      'Cross-Disciplinary Collaboration',
+      'Sustainability-Driven Design Thinking',
+      'Public Speaking & Technical Communication',
+      'Independent Research & Self-Directed Learning',
+    ],
+  },
+
+  honorsAndAwards: [
     {
-      title: '4th UW-POFs Joint Conference on Academia’s Collaboration with Industrial Organizations (CACIO-2024)',
-      role: 'Participant & Delegate',
-      organizer: 'University of Wah & Pakistan Ordnance Factories (POF)',
-      date: '18 December 2024',
-      detail: 'Explored university-industry research translation, precision manufacturing, and infrastructure modernization strategies.',
+      title: 'Gold Medalist – Comsats University Islamabad, Wah Campus',
+      category: 'Gold Medal',
+      awarder: 'COMSATS University Islamabad, Wah Campus',
+      period: '2026/07/06',
+      detail: 'Graduated top of class (CGPA 3.95/4.0) from COMSATS University Islamabad, Wah Campus.',
     },
     {
-      title: 'Departmental Open House & Job Fair 2026',
-      role: 'Final-Year Project Presenter & Award Winner (3rd Position)',
-      organizer: 'Department of Civil Engineering, COMSATS University Islamabad, Wah Campus',
-      date: '3 June 2026',
-      detail: 'Presented prototype BIM-to-AR construction layout visualization systems to visiting industrial delegates and academic review panels.',
+      title: 'Pakistan Ordnance Factory (POF) Scholarship – Comsats University Islamabad, Wah Campus',
+      category: 'Scholarship',
+      awarder: 'COMSATS University Islamabad & POF',
+      period: 'Received for 5 of 8 Semesters',
+      detail:
+        'Merit-based 50% tuition waiver awarded by the university to POF employees\' children, received for 5 of 8 semesters.',
+    },
+    {
+      title: 'English Access Micro Scholarship Program – United States Embassy, Islamabad Pakistan',
+      category: 'Scholarship',
+      awarder: 'United States Embassy, Islamabad Pakistan',
+      period: '2024/05/20',
+      detail: '18-month part-time U.S. Embassy-sponsored English language and leadership program (400 hours).',
+      link: 'https://drive.google.com/file/d/1vUxU9ipBcn6r4T50_VGCD2Ru37p2OaUp/view?usp=sharing',
+    },
+    {
+      title: '3rd Position — Open House & Job Fair, Spring 2026 – Comsats University Islamabad, Wah Campus',
+      category: 'FYP Award',
+      awarder: 'Civil Engineering Department, CUI Wah Campus',
+      period: '2026/06/03',
+      detail: 'Secured 3rd position for Final Year Project at the departmental Open House and Job Fair.',
+      link: 'https://drive.google.com/file/d/1IfROBA17znbjOd4-LIZgQRv7wAfdpcRZ/view?usp=sharing',
+    },
+    {
+      title: 'SFD & BMD Winner, Civil Mania 2024 – Wah Engineering College',
+      category: 'Competition',
+      awarder: 'Wah Engineering College',
+      period: '2024/05/08',
+      detail: '1st place in Shear Force/Bending Moment Diagram competition.',
+      link: 'https://drive.google.com/file/d/1Nlf261tWPgVkfPmRv4pa7DREMI_eQC8U/view?usp=sharing',
+    },
+    {
+      title: 'Truss Bridge Competition - 2nd Position – Civil Engineering Department, Comsats Wah',
+      category: 'Competition',
+      awarder: 'Civil Engineering Department, Comsats Wah',
+      period: '2022/12/15',
+      detail: 'Placed 2nd in a truss bridge design and load-testing competition.',
+      link: 'https://drive.google.com/file/d/1YSc_dfILWlMVDncIfImqUKjtUyWsLynq/view?usp=sharing',
+    },
+    {
+      title: 'Best Surveyor Group – Civil Engineering Department, Comsats Wah',
+      category: 'Competition',
+      awarder: 'Civil Engineering Department, Comsats Wah',
+      period: '2024/08/19',
+      detail: 'Best Survey Group, Batch FA22 — COMSATS Survey Camp, Harnoi, Abbottabad (Aug 2024).',
+      link: 'https://drive.google.com/file/d/17Z-3u3O4zOifxd9r-lTW7rVQBgtm4B5n/view?usp=sharing',
+    },
+  ],
+
+  volunteering: [
+    {
+      title: 'Awareness Video on Child Labour',
+      location: 'Pakistan',
+      period: '2024/06/10 – 2024/06/12',
+      detail:
+        'Created and shared a video against child labor with English Access Micro Scholarship Program participants to mark World Day Against Child Labour (June 12- 2024).',
+      link: 'https://drive.google.com/file/d/1UXkgB-BKh876kN4kptHxmziqxTD3z24L/view?usp=sharing',
+    },
+    {
+      title: 'Community Service — Al-Ummat Sweet Home',
+      location: 'Al Ummat Sweet Home, Wah Cantt',
+      period: '2024/10/01 – 2024/12/01',
+      detail:
+        'Collected donations and purchased school supplies, books, bags, and stationery for orphans, organized through the Civil Engineering Department\'s Community Service Society, COMSATS University Islamabad, Wah Campus.',
+      link: 'https://drive.google.com/file/d/153hOE4Df-wKZvEyAm_ZI3dkcWFztTDr_/view?usp=sharing',
+    },
+    {
+      title: 'Academic Resource Database',
+      organization: 'Civil Engineering Department, Comsats Wah',
+      location: 'Wah Cantt',
+      period: '2022/09/12 – 2026/07/06',
+      detail:
+        'Compiled 4-year Civil Engineering course materials (syllabi, notes, thesis guidelines), shared with juniors; co-contributed with Faizan Manshad.',
+      link: 'https://drive.google.com/drive/folders/1m2kdWPX0X7Dn5LIPxeV_mcUl_yowBMoo?usp=sharing',
+    },
+    {
+      title: 'Professional Volunteer — Alkhidmat Foundation',
+      organization: 'Alkhidmat Foundation',
+      period: '2026/08/07 – Current',
+      detail: 'Registered professional volunteer with Alkhidmat Foundation, a national welfare organization.',
+      link: 'https://drive.google.com/file/d/11htjFQJT6GLwZ6oEzoBCmusKkc129WRu/view?usp=sharing',
+    },
+  ],
+
+  extracurricular: [
+    {
+      title: 'Seminar — Lead Organizer & Speaker',
+      period: '2025/02/19',
+      detail:
+        'Organized and led "The Happy Brain – Fun Ways to Stay Positive," an interactive mental well-being session for students at Pehla Qadam School.',
+      link: 'https://www.facebook.com/share/v/1GDLYfzHTW/',
+    },
+    {
+      title: 'Co-Host — Eid Mingle Day (June 2024)',
+      period: '2024/06/29',
+      detail:
+        'Co-hosted a cultural celebration for English Access CUI Wah students, featuring skits, storytelling, and games to mark Eid traditions.',
+      link: 'https://www.facebook.com/share/v/1EXxwLwiMq/',
+    },
+    {
+      title: '2026 Aspire Leaders Program',
+      period: '2026/02/16 – 2026/04/27',
+      detail:
+        'Completed 40 hours of coursework in the Aspire Institute\'s global leadership program, strengthening self-confidence, critical thinking, and communication skills.',
+      link: 'https://engage.aspireleaders.org/profile/certificates',
+    },
+    {
+      title: 'World Engineering Day 2026',
+      period: '2026/02/02',
+      detail:
+        'Presented BIM-to-AR research as a sustainable solution for Challenge 2 (urban stress, energy demand, and infrastructure inefficiency), addressing SDG 12: Responsible Consumption and Production by reducing rework, material waste, and construction time.',
+      link: 'https://www.youtube.com/watch?v=z70xaKYh1ps',
+    },
+    {
+      title: 'World Engineering Day 2025',
+      period: '2025/03/03',
+      detail:
+        '"Shelter For All" — Proposed an energy-efficient informal-housing solution with solar power and rainwater harvesting, via public-private partnerships for scalable, sustainable communities.',
+      link: 'https://youtu.be/nDrsA6qMuOY?si=L8VNC9_oocDwSA2w',
+    },
+    {
+      title: 'OMLAS (One Million Leaders Asia) Fellowship',
+      period: '2025/11/03 – 2025/12/26',
+      detail:
+        'Selected Fellow in a cross-border Asia-Pacific leadership program, gaining training in sustainability, ethical leadership, and social innovation through a hands-on Leadership Challenge.',
+      link: 'https://asia.omlglobal.org/Certificates/Validate/kashankashi27@gmail.com',
+    },
+    {
+      title: 'World Water Day 2025 — Video Competition (UNESCO/COMSATS)',
+      period: '2025/03/22',
+      detail:
+        'Co-created a group awareness video on glacier preservation and water conservation, presenting policy and legal solutions (international cooperation, anti-pollution regulation) to protect glacier regions; organized by UNESCO Chair on IWRM, COMSATS University Islamabad.',
+      link: 'https://drive.google.com/file/d/1FhGL5GjQOtfxDr2127F2Rca69Hn9kfAZ/view?usp=sharing',
+    },
+    {
+      title: 'Panel Discussion with OMLAS Champions and Fellows',
+      period: '2025/11/29',
+      detail: 'Engaged with OMLAS alumni in discussion on leadership, social impact, and community-driven change.',
+      link: 'https://drive.google.com/file/d/1GmNmxcFWTbMpbFelIVyxEeByvsLweTig/view?usp=sharing',
+    },
+    {
+      title: 'Construct X 3.0 — GIK Institute, ICE Civil Engineering Society',
+      period: '2025/11/21 – 2025/11/23',
+      detail:
+        '3-day competition; contributed to lightweight concrete, load-bridging, and flume sink modules, plus a technical workshop, gaining hands-on experience in innovative construction techniques and teamwork.',
+      link: 'https://drive.google.com/file/d/10fVRUCY1fct-Y7zASTGMGHf6e2GC0DzE/view?usp=sharing',
+    },
+    {
+      title: 'Civil Nexus 2025',
+      period: '2025/04/10',
+      detail:
+        'Participated in a multi-society collaborative civil engineering event organized by ASCE with five societies of University of Wah.',
+      link: 'https://drive.google.com/file/d/18zENPzmPJSIYG5UHTtEiPuSJVMeX1bEY/view?usp=sharing',
+    },
+    {
+      title: 'Speech Competition',
+      period: '2010/11/02',
+      detail: 'Participated in a school-level speech competition series ("Taqareer-e-Silsila Sir Syed").',
+      link: 'https://drive.google.com/file/d/1F1FidzbkugyrkO2oig6FMURn8BWDtUsM/view?usp=sharing',
     },
   ],
 
   languages: [
     {
-      language: 'English',
-      proficiency: 'Fluent / Professional Working Proficiency',
-      note: '400 hours of formal immersion via the U.S. Embassy English Access Scholarship Program; active academic writing and technical presentation proficiency.',
-    },
-    {
       language: 'Urdu',
-      proficiency: 'Native / Bilingual Proficiency',
-      note: 'Mother tongue; comprehensive written and verbal communication.',
-    },
-  ],
-
-  extracurricular: {
-    fellowships: [
-      {
-        title: '2026 Aspire Leaders Program',
-        organization: 'Aspire Institute (Founded at Harvard University)',
-        period: 'April 2026 (40 Hours)',
-        detail: 'Global leadership development program focusing on critical thinking, social impact strategy, cross-cultural collaboration, and ethical leadership.',
-      },
-      {
-        title: 'One Million Leaders Asia (OMLAS) Fellowship',
-        organization: 'One Million Leaders Asia & NELIS Global (Next Leaders Initiative for Sustainability)',
-        period: 'November – December 2025',
-        detail: 'Selected as an OMLAS Fellow / Champion representing Pakistan in regional sustainability, ESG leadership, and climate innovation sessions.',
-      },
-      {
-        title: 'U.S. Embassy English Access Scholarship Program',
-        organization: 'Regional English Language Office (RELO), U.S. Embassy Islamabad & CUI Wah',
-        period: 'May 2024 – November 2025 (18 Months, 400 Hours)',
-        detail: 'Rigorous intensive fellowship covering advanced professional English, diplomatic communication, community advocacy, and leadership development.',
-      },
-    ],
-    competitions: [
-      {
-        title: 'SFD / BMD Competition — Civil Mania 2024',
-        award: '1st Position Winner',
-        event: 'Civil Mania 2024',
-        organizer: 'ASCE Student Chapter, Wah Engineering College (University of Wah)',
-        date: '2024',
-      },
-      {
-        title: 'ICE Truss Bridge Competition',
-        award: '2nd Position Winner',
-        event: 'Annual Truss Bridge Structural Challenge',
-        organizer: 'Institution of Civil Engineers (ICE) Student Chapter, CUI Wah Campus',
-        date: '15 December 2022',
-      },
-      {
-        title: 'Annual Survey Camp 2024',
-        award: 'Best Survey Group Award (Batch FA22)',
-        event: '15-Day Extensive Field Surveying Camp (Abbottabad)',
-        organizer: 'Department of Civil Engineering, CUI Wah Campus',
-        date: 'August 2024',
-      },
-      {
-        title: 'World Engineering Day Hackathons (2025 & 2026)',
-        award: 'Global Participant',
-        event: 'UNESCO & World Federation of Engineering Organizations (WFEO) Global Hackathon',
-        organizer: 'WFEO / UNESCO',
-        date: '2025 & 2026',
-      },
-      {
-        title: 'CONSTRUCTX-3.0',
-        award: 'Participant',
-        event: 'All-Pakistan Civil Engineering Competition',
-        organizer: 'ICE GIK Student Chapter, Ghulam Ishaq Khan Institute (GIKI)',
-        date: 'November 2025',
-      },
-      {
-        title: 'CIVIL NEXUS 2025',
-        award: 'Participant',
-        event: 'Inter-University Engineering Symposium',
-        organizer: 'ASCE Student Chapter, University of Wah',
-        date: 'April 2025',
-      },
-    ],
-  },
-
-  volunteer: [
-    {
-      title: 'Professional Volunteer Member',
-      role: 'Registered Volunteer (Membership ID: AKF-V-98153)',
-      organization: 'Alkhidmat Foundation Pakistan',
-      period: 'Active through August 2028',
-      detail: 'Contributes to community welfare drives, humanitarian logistics, and emergency relief volunteer initiatives.',
+      level: 'Native',
+      detail: 'Mother tongue; comprehensive listening, reading, speaking, and writing proficiency.',
+      isMotherTongue: true,
     },
     {
-      title: 'Lead Organizer & Keynote Speaker — Mental Well-being Seminar',
-      role: 'Lead Organizer & Speaker ("The Happy Brain – Fun Ways to Stay Positive")',
-      organization: 'Pehla Qadam School',
-      period: '19 February 2025',
-      detail: 'Conceived, coordinated, and delivered an interactive mental health and positive thinking workshop for underprivileged primary students.',
-    },
-    {
-      title: 'Community Service for Orphans',
-      role: 'Volunteer',
-      organization: 'Community Services Committee, Department of Civil Engineering, CUI Wah',
-      period: 'Fall 2024',
-      detail: 'Participated in community mentorship, educational support activities, and care packages for orphaned children.',
-    },
-    {
-      title: 'Academic Resource Database Initiative',
-      role: 'Co-Founder & Contributor (with Faizan Manshad)',
-      organization: 'Open-Access Student Academic Database',
-      period: 'September 2022 – July 2026',
-      detail: 'Curated and published an open-access archive of 4-year Civil Engineering course materials, past solutions, and FYP guides to mentor junior peers.',
-    },
-    {
-      title: 'World Day Against Child Labour Advocacy Campaign',
-      role: 'Content Creator & Narrator',
-      organization: 'English Access Micro Scholarship Program Advocacy',
-      period: 'June 2024',
-      detail: 'Authored and produced an educational video raising public awareness regarding child labor exploitation and the right to education.',
-    },
-    {
-      title: 'Eid Mingle Day Cultural Celebration',
-      role: 'Event Co-Host & Facilitator',
-      organization: 'U.S. Embassy English Access Program at CUI Wah',
-      period: 'June 2024',
-      detail: 'Co-hosted and coordinated cultural celebration sessions promoting interfaith harmony and student community connection.',
-    },
-  ],
-
-  honorsAndAwards: [
-    {
-      title: 'University Gold Medal for 1st Position in Class',
-      category: 'Gold Medal',
-      awarder: 'COMSATS University Islamabad, Wah Campus',
-      period: '6 July 2026',
-      detail: 'Awarded for attaining the highest Cumulative Grade Point Average (CGPA 3.95 / 4.00, 98% aggregate) across all 8 semesters in the BS Civil Engineering graduating batch.',
-    },
-    {
-      title: 'Pakistan Ordnance Factories (POF) Merit Scholarship',
-      category: 'Scholarship',
-      awarder: 'Pakistan Ordnance Factories & CUI Wah',
-      period: 'Awarded in 5 Undergraduate Semesters',
-      detail: '50% tuition waiver awarded on high merit standing, strictly restricted to the top 20 students across the entire campus per semester.',
-    },
-    {
-      title: '7× Departmental Semester Merit Position Certificates',
-      category: 'Merit Position',
-      awarder: 'Director & Controller of Examinations, CUI Wah Campus',
-      period: '2022 – 2026',
-      detail: 'Sem 1 (Fall 22): 2nd Pos (3.83 SGPA) · Sem 2 (Spring 23): 3rd Pos (3.85 SGPA) · Sem 3 (Fall 23): 1st Pos (4.00 SGPA) · Sem 4 (Spring 24): 1st Pos (4.00 SGPA) · Sem 5 (Fall 24): 2nd Pos (4.00 SGPA) · Sem 6 (Spring 25): 2nd Pos (3.94 SGPA) · Sem 7 (Fall 25): 1st Pos (4.00 SGPA).',
-    },
-    {
-      title: 'Final-Year Capstone Project Award (3rd Position)',
-      category: 'FYP Award',
-      awarder: 'CUI Departmental Open House & Job Fair Spring 2026',
-      period: '3 June 2026',
-      detail: 'Recognized for pioneering the BIM-to-AR mobile augmented reality deployment framework for on-site construction layout visualization.',
-    },
-    {
-      title: 'Winner (1st Position) — SFD / BMD Competition',
-      category: 'Competition',
-      awarder: 'Civil Mania 2024 (ASCE Student Chapter, WEC)',
-      period: '2024',
-      detail: 'Secured 1st place in the inter-university Shear Force & Bending Moment Diagram analytical calculation challenge.',
-    },
-    {
-      title: '2nd Position Winner — ICE Truss Bridge Competition',
-      category: 'Competition',
-      awarder: 'Institution of Civil Engineers (ICE) Student Chapter, CUI Wah',
-      period: '15 December 2022',
-      detail: 'Awarded for designing and testing a high strength-to-weight ratio model steel/balsa through-truss bridge.',
-    },
-    {
-      title: 'Best Survey Group Award — Annual Survey Camp Abbottabad',
-      category: 'Competition',
-      awarder: 'Civil Engineering Department, CUI Wah Campus',
-      period: 'August 2024',
-      detail: 'Awarded for high-accuracy topographic contouring, traverse calculations, and fieldwork leadership during the 15-day Abbottabad survey camp.',
+      language: 'English',
+      level: 'CEFR B2 (Independent User)',
+      detail:
+        'B2 across Listening, Reading, Spoken Production, Spoken Interaction, and Writing. Enhanced through 400 hours in the U.S. Embassy English Access Micro Scholarship Program.',
+      isMotherTongue: false,
     },
   ],
 }

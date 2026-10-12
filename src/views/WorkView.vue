@@ -90,22 +90,24 @@ function reset() {
 
 .search-full input {
   width: 100%;
-  background: var(--surface);
+  background: var(--surface-input);
   border: 1px solid var(--line);
   color: var(--text);
-  padding: 13px 18px;
+  padding: 12px 18px;
+  min-height: 44px;
   border-radius: 2px;
-  font-size: 0.95rem;
+  font-size: 16px;
   font-family: inherit;
   transition: border-color 160ms ease;
 }
 
 .search-full input:focus {
-  outline: none;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
   border-color: var(--accent);
 }
 
 .search-full input::placeholder {
-  color: var(--muted);
+  color: rgba(181, 195, 191, 0.6);
 }
 </style>

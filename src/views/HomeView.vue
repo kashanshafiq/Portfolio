@@ -164,8 +164,8 @@ const featured = projects[0]!
 <style scoped>
 .home-contact-section {
   padding-block: 85px 110px;
-  border-top: 1px solid var(--line, #34463e);
-  background: var(--bg, #141a19);
+  border-top: 1px solid var(--line);
+  background: var(--bg);
   scroll-margin-top: 40px;
 }
 
@@ -177,16 +177,16 @@ const featured = projects[0]!
 }
 
 .contact-editorial h2 {
-  font-size: clamp(2.3rem, 4.4vw, 3.8rem);
+  font-size: clamp(2.2rem, 4.2vw, 3.8rem);
   margin-block: 18px 22px;
   line-height: 1.06;
 }
 
 .contact-desc {
-  font-size: 1.05rem;
-  color: var(--muted, #b0b9b2);
+  font-size: 1.08rem;
+  color: var(--muted);
   line-height: 1.65;
-  max-width: 520px;
+  max-width: var(--prose-max-width, 68ch);
   margin-bottom: 34px;
 }
 
@@ -194,7 +194,7 @@ const featured = projects[0]!
   display: flex;
   flex-direction: column;
   gap: 20px;
-  border-top: 1px solid var(--line, #34463e);
+  border-top: 1px solid var(--line);
   padding-top: 26px;
   max-width: 500px;
 }
@@ -210,16 +210,17 @@ const featured = projects[0]!
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  min-height: 44px;
   transition: color 160ms;
 }
 
 .contact-channel-link:hover {
-  color: #fff;
+  color: var(--accent-hover);
 }
 
 .contact-location-info {
-  color: var(--text, #eeeFE9);
+  color: var(--text);
   font-size: 0.95rem;
 }
 
